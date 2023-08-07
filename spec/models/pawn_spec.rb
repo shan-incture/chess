@@ -1,22 +1,36 @@
 require 'rails_helper'
 
 describe Pawn do
-  context 'when the pawn is created' do
-    it 'should have a x and y coordinate' do
-      pawn = Pawn.new(0, 0, 'NORTH', 'WHITE')
-      expect(pawn).to be_a(Pawn)
-      expect(pawn.x).to eq(0)
-      expect(pawn.y).to eq(0)
-    end
+  it "should be valid with valid attributes" do
+    pawn = Pawn.instance.place(1,2,"NORTH","WHITE")
+    expect(pawn).to be_valid
+  end
 
-    it 'should have a facing direction' do
-      pawn = Pawn.new(0, 0, 'NORTH', 'WHITE')
-      expect(pawn.facing).to eq('NORTH')
-    end
+  it "should not be valid with invalid attributes" do
+    pawn = Pawn.instance.place(8,2,"NORTH","WHITE")
+    expect(pawn).not_to be_valid
+  end
 
-    it 'should have a color' do
-      pawn = Pawn.new(0, 0, 'NORTH', 'WHITE')
-      expect(pawn.color).to eq('WHITE')
-    end
+  it "should be able to move" do
+    pawn = Pawn.instance.place(1,2,"NORTH","WHITE")
+    pawn.move(1)
+    expect(pawn.y).to eq(3)
+  end
+
+  it "should be able to turn left" do
+    pawn = Pawn.instance.place(1,2,"NORTH","WHITE")
+    pawn.left
+    expect(pawn.facing).to eq("WEST")
+  end
+
+  it "should be able to turn right" do
+    pawn =Pawn.instance.place(1,2,"NORTH","WHITE")
+    pawn.right
+    expect(pawn.facing).to eq("EAST")
+  end
+
+  it "should be able to report its position" do
+    pawn = Pawn.instance.place(1,2,"NORTH","WHITE")
+    expect(pawn.report).to eq("1,2,NORTH,WHITE")
   end
 end
